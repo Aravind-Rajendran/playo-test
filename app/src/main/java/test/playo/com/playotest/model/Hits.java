@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import test.playo.com.playotest.utils.NullPrimitive;
+
 /**
  * Created by Asthme on 10/15/17.
  */
@@ -49,16 +51,69 @@ public class Hits {
         String url;
         String author;
         int points;
+        @NullPrimitive(fallbackInt = -1)
         int num_comments;
+        List<String> _tags= new ArrayList<>();
+
 
         HighLightResult _highlightResult;
 
 
+        public String getUrl() {
+            return url;
+        }
 
+        public String getTitle() {
+            return title;
+        }
 
+        public String getAuthor() {
+            return author;
+        }
 
+        public int getPoints() {
+            return points;
+        }
 
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public void setAuthor(String author) {
+            this.author = author;
+        }
+
+        public void setPoints(int points) {
+            this.points = points;
+        }
+
+        public int getNum_comments() {
+            return num_comments;
+        }
+
+        public void setNum_comments(int num_comments) {
+            this.num_comments = num_comments;
+        }
+
+        public List<String> get_tags() {
+            return _tags;
+        }
+
+        public void set_tags(List<String> _tags) {
+            this._tags = _tags;
+        }
+
+        public HighLightResult get_highlightResult() {
+            return _highlightResult;
+        }
+
+        public void set_highlightResult(HighLightResult _highlightResult) {
+            this._highlightResult = _highlightResult;
+        }
     }
 
 

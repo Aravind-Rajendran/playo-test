@@ -1,26 +1,15 @@
-package test.playo.com.myapplication.datamanager;
+package test.playo.com.playotest.datamanager;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
-import android.media.AudioManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
-
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -29,16 +18,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import test.playo.com.myapplication.MainActivity;
-import test.playo.com.myapplication.http.model.Hits;
-
+import test.playo.com.playotest.MainActivity;
+import test.playo.com.playotest.model.Hits;
+import test.playo.com.playotest.utils.NullPrimitiveAdapter;
+import test.playo.com.playotest.utils.NullPrimitiveJsonAdapter;
 
 
 /**

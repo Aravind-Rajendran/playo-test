@@ -1,8 +1,6 @@
-package test.playo.com.myapplication;
+package test.playo.com.playotest;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,11 +10,10 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
 import java.util.List;
 
-import test.playo.com.myapplication.datamanager.HitItemDataManager;
-import test.playo.com.myapplication.http.model.Hits;
+import test.playo.com.playotest.datamanager.HitItemDataManager;
+import test.playo.com.playotest.model.Hits;
 
 
 public class HitItemListAdapter<T> extends RecyclerView.Adapter{

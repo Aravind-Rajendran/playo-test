@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package test.playo.com.myapplication.datamanager;
+package test.playo.com.playotest.datamanager;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
