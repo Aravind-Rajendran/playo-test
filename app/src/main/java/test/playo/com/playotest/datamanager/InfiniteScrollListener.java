@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 public abstract class InfiniteScrollListener extends RecyclerView.OnScrollListener {
 
     // The minimum number of items remaining before we should loading more.
-    private int VISIBLE_THRESHOLD = 8;
+    private int VISIBLE_THRESHOLD = 2;
 
     private final LinearLayoutManager layoutManager;
     private final DataLoadingSubject dataLoading;

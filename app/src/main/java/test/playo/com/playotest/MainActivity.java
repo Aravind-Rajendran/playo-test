@@ -14,7 +14,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import java.io.IOException;
 
@@ -30,7 +33,7 @@ import test.playo.com.playotest.http.OKHttpHelper;
 import test.playo.com.playotest.model.Hits;
 
 
-public class MainActivity extends AppCompatActivity implements DataLoadingSubject.DataLoadingCallbacks {
+public class MainActivity extends AppCompatActivity implements DataLoadingSubject.DataLoadingCallbacks , AdapterView.OnItemSelectedListener {
     private static final String TAG = "MainActivity";
     RecyclerView recyclerView;
     HitItemDataManager<Hits> hitsHitItemDataManager;
@@ -41,6 +44,19 @@ public class MainActivity extends AppCompatActivity implements DataLoadingSubjec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+// Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.array, android.R.layout.simple_spinner_item);
+// Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
+
+
+
         String feedurl = "https://hn.algolia.com/api/v1/search";
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setVisibility(View.INVISIBLE);
@@ -84,6 +100,29 @@ public class MainActivity extends AppCompatActivity implements DataLoadingSubjec
 
 
         }
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+        Log.i(TAG,"spinner choose"+adapterView.getAdapter().getItem(i));
+
+
+        hitsHitItemDataManager.setQuery(adapterView.getAdapter().getItem(i).toString());
+        hitsHitItemDataManager.clearData();
+
+
+
+
+
+
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
 }

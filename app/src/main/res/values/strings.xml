@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">PlayoTest</string>
+    <string-array name="array">
+        <item>All</item>
+        <item>sports</item>
+        <item>bollywood</item>
+        <item>politcs</item>
+    </string-array>
 </resources>

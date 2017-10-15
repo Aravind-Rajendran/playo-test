@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.View;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
@@ -55,6 +56,7 @@ public class HitItemDataManager<T> extends BaseDataManager<T> implements DataCha
     Loader loader = new Loader(null);
 
     private  int page = 0;
+    private String query=null;
 
 
 
@@ -114,6 +116,8 @@ public class HitItemDataManager<T> extends BaseDataManager<T> implements DataCha
         Log.d(TAG, "feedUri " + uri + "");
 
         uriBuilder.appendQueryParameter("page", page+ "");
+        if (query!=null)
+        uriBuilder.appendQueryParameter("query",query );
 
 
         Log.d(TAG, "final uri " + uriBuilder.build().toString());
@@ -171,6 +175,15 @@ public class HitItemDataManager<T> extends BaseDataManager<T> implements DataCha
         }
 
     }
+    public void clearData() {
+
+        page = 1;
+        feedItems.clear();
+        loaddata(feedUri);
+
+    }
+
+
 
     public void addLoadingElement(){
         Log.d("PaginatedManager","called addLoadingElement");
@@ -192,7 +205,7 @@ public class HitItemDataManager<T> extends BaseDataManager<T> implements DataCha
         if (feedItems == null) {
             feedItems = new ArrayList();
         }
-        int initSize = hits.getHits().size();
+        int initSize = feedItems.size();
 
 
         feedItems.addAll((Collection<? extends T>) hits.getHits());
@@ -246,6 +259,10 @@ public class HitItemDataManager<T> extends BaseDataManager<T> implements DataCha
         for (DataChangedCallbacks loadingCallback : loadingCallbackstemp) {
             loadingCallback.itemRemoved(position);
         }
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
     }
 
     public static class Loader implements Serializable {

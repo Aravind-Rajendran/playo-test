@@ -203,7 +203,15 @@ public class HitItemListAdapter<T> extends RecyclerView.Adapter implements  Data
     }
 
     @Override
-    public void itemRemoved(int position) {
+    public void itemRemoved(final  int position) {
+        if(mainActivity != null)
+            ((MainActivity)mainActivity).recyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position,hitItemList.size());
+                }
+            },300);
 
     }
 
