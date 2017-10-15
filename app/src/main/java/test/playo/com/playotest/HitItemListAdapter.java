@@ -1,22 +1,27 @@
 package test.playo.com.playotest;
 
 import android.app.Activity;
+import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
 
+import test.playo.com.playotest.datamanager.DataChangeNotifier;
 import test.playo.com.playotest.datamanager.HitItemDataManager;
 import test.playo.com.playotest.model.Hits;
 
 
-public class HitItemListAdapter<T> extends RecyclerView.Adapter{
+public class HitItemListAdapter<T> extends RecyclerView.Adapter implements  DataChangeNotifier.DataChangedCallbacks{
     private List<Hits.Item> hitItemList;
     private Activity mContext;
 
@@ -56,6 +61,7 @@ public class HitItemListAdapter<T> extends RecyclerView.Adapter{
         inflater = LayoutInflater.from(context);
 
         this.hitItemDataManager=hitItemDataManager;
+        this.hitItemDataManager.registerCallback(this);
 
     }
 
@@ -95,6 +101,21 @@ public class HitItemListAdapter<T> extends RecyclerView.Adapter{
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item, viewGroup,false);
         final ItemViewHolder viewHolder = new ItemViewHolder(view);
 
+        viewHolder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Hits.Item item = hitItemList.get(viewHolder.getAdapterPosition());
+                if (item.getUrl()!=null&& item.getUrl().contains("http"))
+                {
+                    String url = item.getUrl();
+                    Uri uri = Uri.parse(url);
+                    openUri(uri);
+                }
+
+            }
+        });
+
 
         return viewHolder;
     }
@@ -116,7 +137,7 @@ public class HitItemListAdapter<T> extends RecyclerView.Adapter{
         if (getItemViewType(i)==ITEM)
         {
             Hits.Item v= (Hits.Item)saleItem;
-            onBindProductViewHolder((ItemViewHolder) customViewHolder,v);
+            onBindViewHolder((ItemViewHolder) customViewHolder,v);
 
         }
         if (getItemViewType(i)==LOAD_MORE)
@@ -128,13 +149,22 @@ public class HitItemListAdapter<T> extends RecyclerView.Adapter{
 
     }
 
-    public void onBindProductViewHolder(ItemViewHolder viewHolder, final Hits.Item item)
+    public void onBindViewHolder(ItemViewHolder viewHolder, final Hits.Item item)
 
 
     {
         viewHolder.title.setText(item.getTitle());
         viewHolder.author.setText(item.getAuthor());
         viewHolder.points.setText(""+item.getPoints());
+        if (!item.get_tags().isEmpty()) {
+            TagCarouselAdapter tagCarouselAdapter = new TagCarouselAdapter(mContext, item.get_tags());
+            viewHolder.recyclerView_tag.setAdapter(tagCarouselAdapter);
+            viewHolder.recyclerView_tag.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            viewHolder.recyclerView_tag.setVisibility(View.GONE);
+        }
 
 
     }
@@ -150,12 +180,38 @@ public class HitItemListAdapter<T> extends RecyclerView.Adapter{
         return (null != hitItemList ? hitItemList.size() : 0);
     }
 
+    @Override
+    public void itemInserted( final int position) {
+        if(mainActivity != null)
+            ((MainActivity)mainActivity).recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    notifyItemInserted(position);
+                }
+            });
+    }
 
+    @Override
+    public void itemRangeInserted(final  int offset,final int size) {
+        ((MainActivity)mainActivity).recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemRangeInserted(offset,size);
+            }
+        });
+
+    }
+
+    @Override
+    public void itemRemoved(int position) {
+
+    }
 
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         protected TextView title,author,points;
         protected RecyclerView recyclerView_tag;
+        protected LinearLayout container;
 
 
 
@@ -170,6 +226,9 @@ public class HitItemListAdapter<T> extends RecyclerView.Adapter{
             this.recyclerView_tag= (RecyclerView)view.findViewById(R.id.recycler_view_tag);
             this.author= (TextView)view.findViewById(R.id.author);
             this.points= (TextView)view.findViewById(R.id.points);
+            this.container=(LinearLayout)view.findViewById(R.id.container);
+
+
 
 
 
@@ -229,6 +288,28 @@ public class HitItemListAdapter<T> extends RecyclerView.Adapter{
 
 
     }
+
+    private void openUri(Uri uri)
+    {
+
+        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+
+// Begin customizing
+// set toolbar colors
+        intentBuilder.setToolbarColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+        intentBuilder.setSecondaryToolbarColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+
+// set start and exit animations
+
+
+// build custom tabs intent
+        CustomTabsIntent customTabsIntent = intentBuilder.build();
+
+// launch the url
+        customTabsIntent.launchUrl(mContext, uri);
+    }
+
+
 
 
 

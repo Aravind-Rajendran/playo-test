@@ -6,6 +6,9 @@ package test.playo.com.playotest;
 import android.net.Uri;
 
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsClient;
+import android.support.customtabs.CustomTabsServiceConnection;
+import android.support.customtabs.CustomTabsSession;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,14 +25,17 @@ import okhttp3.Request;
 import okhttp3.Response;
 import test.playo.com.playotest.datamanager.DataLoadingSubject;
 import test.playo.com.playotest.datamanager.HitItemDataManager;
+import test.playo.com.playotest.datamanager.InfiniteScrollListener;
 import test.playo.com.playotest.http.OKHttpHelper;
 import test.playo.com.playotest.model.Hits;
+
 
 public class MainActivity extends AppCompatActivity implements DataLoadingSubject.DataLoadingCallbacks {
     private static final String TAG = "MainActivity";
     RecyclerView recyclerView;
     HitItemDataManager<Hits> hitsHitItemDataManager;
     HitItemListAdapter hitItemListAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +49,17 @@ public class MainActivity extends AppCompatActivity implements DataLoadingSubjec
         final LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView.setLayoutManager(layoutManager);
 
-        recyclerView.setItemViewCacheSize(0);
+
+
         hitsHitItemDataManager = new HitItemDataManager<Hits>(MainActivity.this, MainActivity.this, OKHttpHelper.getInstanceOf(MainActivity.this));
         hitsHitItemDataManager.registerCallback(this);
+        InfiniteScrollListener listener = new InfiniteScrollListener(layoutManager, hitsHitItemDataManager) {
+            @Override
+            public void onLoadMore() {
+                hitsHitItemDataManager.loadmoreData();
+            }
+        };
+        recyclerView.addOnScrollListener(listener);
 
     }
 
@@ -64,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadingSubjec
                 hitItemListAdapter = new HitItemListAdapter(MainActivity.this, hitsHitItemDataManager.getList(), MainActivity.this,hitsHitItemDataManager);
                 recyclerView.setAdapter(hitItemListAdapter);
             }
-//            videoListAdapter.notifyDataSetChanged();
+
             ProgressBar progressbar = (ProgressBar) findViewById(R.id.progress_bar);
             progressbar.setVisibility(View.GONE);
 

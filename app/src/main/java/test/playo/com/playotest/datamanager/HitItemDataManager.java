@@ -145,7 +145,9 @@ public class HitItemDataManager<T> extends BaseDataManager<T> implements DataCha
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
+                            removeLoadingElement();
                             addHitItemData(hits);
+
                             loadFinished(true,code);
                         }
                     });

@@ -60,4 +60,6 @@ dependencies {
                 exclude module: 'support-v4';
 
             }
+    compile "com.android.support:customtabs:$supportLibVersion"
+
 }
