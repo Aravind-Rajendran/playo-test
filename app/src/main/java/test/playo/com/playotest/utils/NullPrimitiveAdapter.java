@@ -1,4 +1,4 @@
-package test.playo.com.myapplication.datamanager;
+package test.playo.com.playotest.utils;
 
 import android.support.annotation.Nullable;
 import android.util.Log;

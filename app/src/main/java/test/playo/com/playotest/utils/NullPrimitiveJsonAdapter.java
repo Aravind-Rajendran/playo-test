@@ -1,19 +1,17 @@
-package test.playo.com.myapplication.datamanager;
+package test.playo.com.playotest.utils;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.JsonWriter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-
 
 
 public final class NullPrimitiveJsonAdapter<T> extends JsonAdapter<T> {
@@ -32,9 +30,10 @@ public final class NullPrimitiveJsonAdapter<T> extends JsonAdapter<T> {
         PRIMITIVE_CLASSES.add(short.class);
     }
 
-    public static final JsonAdapter.Factory FACTORY = new JsonAdapter.Factory() {
-        @Override public JsonAdapter<?> create(Type type, Set<? extends Annotation> annotations,
-                                               Moshi moshi) {
+    public static final Factory FACTORY = new Factory() {
+        @Override
+        public JsonAdapter<?> create(Type type, Set<? extends Annotation> annotations,
+                                     Moshi moshi) {
             Annotation annotation = findAnnotation(annotations, NullPrimitive.class);
             if (annotation == null) return null;
 
@@ -80,7 +79,8 @@ public final class NullPrimitiveJsonAdapter<T> extends JsonAdapter<T> {
         this.fallbackType = fallbackType;
     }
 
-    @Override public T fromJson(JsonReader reader) throws IOException {
+    @Override
+    public T fromJson(JsonReader reader) throws IOException {
         if (reader.peek() == JsonReader.Token.NULL) {
             reader.nextNull(); // We need to consume the value.
             return fallback;
@@ -88,11 +88,13 @@ public final class NullPrimitiveJsonAdapter<T> extends JsonAdapter<T> {
         return adapter.fromJson(reader);
     }
 
-    @Override public void toJson(JsonWriter writer, T value) throws IOException {
+    @Override
+    public void toJson(JsonWriter writer, T value) throws IOException {
         adapter.toJson(writer, value);
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return adapter + ".fallbackOnNull(" + fallbackType + '=' + fallback + ')';
     }
     public static Annotation findAnnotation(Set<? extends Annotation> annotations,

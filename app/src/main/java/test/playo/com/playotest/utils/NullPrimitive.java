@@ -1,5 +1,5 @@
 
-package test.playo.com.myapplication.datamanager;
+package test.playo.com.playotest.utils;
 
 import com.squareup.moshi.JsonQualifier;
 
