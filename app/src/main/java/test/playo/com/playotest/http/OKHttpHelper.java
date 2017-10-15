@@ -15,7 +15,6 @@ public class OKHttpHelper {
     private static OkHttpClient okHttpClient;
 
 
-
     public static OkHttpClient getInstanceOf(Context context) {
         if (okHttpClient == null)
             okHttpClient = getOkHttpClient(context);
